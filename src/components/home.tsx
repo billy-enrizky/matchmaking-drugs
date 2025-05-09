@@ -47,7 +47,6 @@ const Home = () => {
           </div>
         </div>
       </header>
-
       {/* Hero Section */}
       <section className="container mx-auto py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -136,7 +135,7 @@ const Home = () => {
               </CardContent>
               <CardFooter>
                 <Button
-                  className="w-full"
+                  className="w-full border-[#000000] bg-[#000000]"
                   size="lg"
                   variant="outline"
                   onClick={() => handleIntentSelection("providing")}
@@ -149,7 +148,6 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-
       {/* Features Section */}
       <section className="container mx-auto py-16 px-4 bg-white rounded-t-3xl">
         <div className="max-w-6xl mx-auto">
@@ -200,7 +198,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Stats Section */}
       <section className="container mx-auto py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
@@ -220,7 +217,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="container mx-auto py-16 px-4">
         <div className="max-w-4xl mx-auto text-center bg-blue-600 text-white p-12 rounded-xl">
@@ -249,7 +245,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-4">
