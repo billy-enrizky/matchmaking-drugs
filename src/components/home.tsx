@@ -135,7 +135,7 @@ const Home = () => {
               </CardContent>
               <CardFooter>
                 <Button
-                  className="w-full border-[#000000] bg-[#000000]"
+                  className="w-full border-[#000000] bg-[#000000] text-white"
                   size="lg"
                   variant="outline"
                   onClick={() => handleIntentSelection("providing")}
