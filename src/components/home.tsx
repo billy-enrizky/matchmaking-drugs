@@ -98,9 +98,10 @@ const Home = () => {
               </CardContent>
               <CardFooter>
                 <Button
-                  className="w-full"
+                  className="w-full border-[#000000] bg-[#000000] text-white"
                   size="lg"
-                  onClick={() => handleIntentSelection("seeking")}
+                  variant="outline"
+                  onClick={() => handleIntentSelection("providing")}
                 >
                   Find Medications
                   <ArrowRight className="ml-2 h-4 w-4" />
