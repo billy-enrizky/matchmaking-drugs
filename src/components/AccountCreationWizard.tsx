@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -20,10 +20,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface AccountCreationWizardProps {
   onComplete?: (data: AccountData) => void;
-  userType?: "seeker" | "provider";
+  userType?: "seeking" | "providing";
 }
 
 interface AccountData {
@@ -42,8 +43,10 @@ interface AccountData {
 
 const AccountCreationWizard: React.FC<AccountCreationWizardProps> = ({
   onComplete = () => {},
-  userType = "seeker",
+  userType = "seeking",
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<AccountData>({
     hospitalName: "",
@@ -58,6 +61,15 @@ const AccountCreationWizard: React.FC<AccountCreationWizardProps> = ({
     licenseNumber: "",
     additionalInfo: "",
   });
+
+  useEffect(() => {
+    // Get intent from location state if available
+    if (location.state && location.state.intent) {
+      const intent = location.state.intent as "seeking" | "providing";
+      // Set userType based on intent from navigation
+      userType = intent;
+    }
+  }, [location]);
 
   const steps = [
     {
@@ -106,6 +118,19 @@ const AccountCreationWizard: React.FC<AccountCreationWizardProps> = ({
     setCurrentStep(3);
     // Call the onComplete callback with the form data
     onComplete(formData);
+  };
+
+  const handleReturn = () => {
+    navigate('/');
+  };
+
+  const handleStartUsing = () => {
+    // Redirect based on user type
+    if (userType === "seeking") {
+      navigate("/drug-search");
+    } else {
+      navigate("/inventory");
+    }
   };
 
   const renderStepContent = () => {
@@ -293,23 +318,16 @@ const AccountCreationWizard: React.FC<AccountCreationWizardProps> = ({
             </p>
             <div className="mt-6">
               <Button
-                onClick={() => (window.location.href = "/")}
+                onClick={handleReturn}
                 variant="outline"
               >
                 Return to Home
               </Button>
               <Button
                 className="ml-2"
-                onClick={() => {
-                  // Redirect based on user type
-                  if (userType === "seeker") {
-                    window.location.href = "/drug-search";
-                  } else {
-                    window.location.href = "/inventory";
-                  }
-                }}
+                onClick={handleStartUsing}
               >
-                {userType === "seeker" ? "Start Searching" : "Manage Inventory"}
+                {userType === "seeking" ? "Start Searching" : "Manage Inventory"}
               </Button>
             </div>
           </div>

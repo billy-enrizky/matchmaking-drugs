@@ -1,3 +1,4 @@
+// filepath: /home/billy/OneDrive/matchmaking-drugs/src/components/DrugSearchInterface.tsx
 import React, { useState } from "react";
 import { Search, Filter, AlertCircle, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Drug {
   id: string;
@@ -47,12 +50,15 @@ interface Drug {
 }
 
 const DrugSearchInterface = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [quantity, setQuantity] = useState<number>(1);
   const [priority, setPriority] = useState<string>("medium");
   const [activeTab, setActiveTab] = useState("search");
   const [showDialog, setShowDialog] = useState(false);
   const [selectedDrug, setSelectedDrug] = useState<Drug | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   // Mock data for demonstration
   const mockResults: Drug[] = [
@@ -98,8 +104,22 @@ const DrugSearchInterface = () => {
   ];
 
   const handleSearch = () => {
-    // In a real implementation, this would trigger an API call
-    setActiveTab("results");
+    if (!searchTerm.trim()) {
+      toast({
+        title: "Search field is empty",
+        description: "Please enter a drug name to search",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSearching(true);
+    
+    // Simulate API call with mock data
+    setTimeout(() => {
+      setActiveTab("results");
+      setIsSearching(false);
+    }, 1000);
   };
 
   const handleSendRequest = (drug: Drug) => {
@@ -108,9 +128,20 @@ const DrugSearchInterface = () => {
   };
 
   const handleConfirmRequest = () => {
-    // In a real implementation, this would send the request to the provider
+    if (!selectedDrug) return;
+
+    // Simulate API call to send request
+    toast({
+      title: "Request Sent Successfully",
+      description: `Your request for ${selectedDrug.name} has been sent to ${selectedDrug.hospital.name}`,
+    });
+
     setShowDialog(false);
-    // Show success message or navigate to a confirmation page
+    
+    // Navigate to messaging interface after a brief delay
+    setTimeout(() => {
+      navigate("/messaging");
+    }, 1500);
   };
 
   const getSimilarityBadgeColor = (score: number) => {
@@ -208,10 +239,10 @@ const DrugSearchInterface = () => {
             <CardFooter>
               <Button
                 onClick={handleSearch}
-                disabled={!searchTerm.trim()}
+                disabled={!searchTerm.trim() || isSearching}
                 className="w-full"
               >
-                Search for Matches
+                {isSearching ? "Searching..." : "Search for Matches"}
               </Button>
             </CardFooter>
           </Card>

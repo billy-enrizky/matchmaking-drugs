@@ -1,4 +1,5 @@
-import React from "react";
+// filepath: /home/billy/OneDrive/matchmaking-drugs/src/components/home.tsx
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +19,51 @@ import {
   Pill,
   ArrowRightLeft,
 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
 
   const handleIntentSelection = (intent: "seeking" | "providing") => {
     // Navigate to account creation wizard with the selected intent
     navigate("/account-creation", { state: { intent } });
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
+  const handleSignUp = () => {
+    navigate("/account-creation");
+  };
+
+  const handleSubscribe = () => {
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // In a real app, this would send the email to your backend
+    toast({
+      title: "Subscribed!",
+      description: "You've been added to our newsletter",
+    });
+    setEmail("");
+  };
+
+  const handleFooterLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    e.preventDefault();
+    navigate(path);
   };
 
   return (
@@ -39,11 +78,11 @@ const Home = () => {
             </h1>
           </div>
           <div className="flex gap-4">
-            <Button variant="ghost">About</Button>
-            <Button variant="ghost">How It Works</Button>
-            <Button variant="ghost">Contact</Button>
-            <Button variant="outline">Login</Button>
-            <Button>Sign Up</Button>
+            <Button variant="ghost" onClick={() => handleNavigation("/about")}>About</Button>
+            <Button variant="ghost" onClick={() => handleNavigation("/how-it-works")}>How It Works</Button>
+            <Button variant="ghost" onClick={() => handleNavigation("/contact")}>Contact</Button>
+            <Button variant="outline" onClick={handleLogin}>Login</Button>
+            <Button onClick={handleSignUp}>Sign Up</Button>
           </div>
         </div>
       </header>
@@ -101,7 +140,7 @@ const Home = () => {
                   className="w-full border-[#000000] bg-[#000000] text-white"
                   size="lg"
                   variant="outline"
-                  onClick={() => handleIntentSelection("providing")}
+                  onClick={() => handleIntentSelection("seeking")}
                 >
                   Find Medications
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -264,22 +303,38 @@ const Home = () => {
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/about")}
+                  >
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/how-it-works")}
+                  >
                     How It Works
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/faq")}
+                  >
                     FAQ
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/contact")}
+                  >
                     Contact
                   </a>
                 </li>
@@ -289,22 +344,38 @@ const Home = () => {
               <h4 className="text-lg font-semibold mb-4">Legal</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/terms")}
+                  >
                     Terms of Service
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/privacy")}
+                  >
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/security")}
+                  >
                     Data Security
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white">
+                  <a 
+                    href="#" 
+                    className="text-gray-400 hover:text-white"
+                    onClick={(e) => handleFooterLinkClick(e, "/compliance")}
+                  >
                     Compliance
                   </a>
                 </li>
@@ -320,8 +391,15 @@ const Home = () => {
                   type="email"
                   placeholder="Your email"
                   className="px-4 py-2 rounded-l-md w-full focus:outline-none text-gray-900"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <Button className="rounded-l-none">Subscribe</Button>
+                <Button 
+                  className="rounded-l-none"
+                  onClick={handleSubscribe}
+                >
+                  Subscribe
+                </Button>
               </div>
             </div>
           </div>
